@@ -1,0 +1,8 @@
+.gradle
+.idea
+.kotlin
+build
+jar
+run
+extra-mods
+src/generated/resources/.cache

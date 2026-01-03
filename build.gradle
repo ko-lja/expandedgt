@@ -1,0 +1,214 @@
+buildscript {
+    repositories {
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '2.0.20'
+    id 'eclipse'
+    id 'idea'
+    id 'net.neoforged.moddev.legacyforge' version '2.0.137'
+    id 'io.freefair.lombok' version '8.13.1'
+    id 'dev.vfyjxf.modaccessor' version '1.2.2'
+}
+
+group = mod_group_id
+version = mod_version
+
+base {
+    archivesName = mod_id
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "17"
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+legacyForge {
+    version = project.minecraft_version + '-' + project.forge_version
+
+    runs {
+        configureEach {
+            gameDirectory = project.file('run')
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+
+        client {
+            client()
+            sourceSet = sourceSets.main
+
+
+            systemProperty 'mixin.excludes', 'architectury.mixins.json'
+            jvmArgument "-mixin.config=mixins.${mod_id}.json"
+            jvmArgument "-XX:+AllowEnhancedClassRedefinition"
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'forge.logging.console.level', 'debug'
+            systemProperty 'forge.enabledGameTestNamespaces', '${mod_id}'
+            programArguments.addAll('--existing-mod', 'gtceu')
+        }
+
+        server {
+            server()
+            sourceSet = sourceSets.main
+
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+            programArguments.addAll('--nogui', '--world', 'world-extra')
+            programArgument "-mixin.config=mixins.${mod_id}.json"
+        }
+
+        data {
+            data()
+
+            sourceSet = sourceSets.main
+
+            programArguments.addAll('--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath())
+            programArguments.addAll('--existing-mod', 'gtceu')
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+sourceSets {
+    main {
+        ext.refMap = "mixins.${mod_id}.refmap.json"
+    }
+}
+
+def extraModsDir = "extra-mods"
+file(extraModsDir).mkdir()
+
+repositories {
+    mavenLocal()
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+        content { includeGroup "thedarkcolour" }
+    }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        url = uri("https://modmaven.dev/")
+        content {
+            includeGroup "appeng"
+        }
+    }
+    maven {
+        name = 'GTCEu Maven'
+        url = 'https://maven.gtceu.com'
+        content {
+            includeGroup 'com.gregtechceu.gtceu'
+        }
+    }
+    maven { // Registrate
+        url "https://maven.tterrag.com/"
+    }
+    maven {
+        name "firstdarkdev"
+        url "https://maven.firstdarkdev.xyz/snapshots"
+    }
+    flatDir {
+        name "extra-mods"
+        dir file(extraModsDir)
+    }
+}
+
+modAccessor {
+    createTransformConfiguration(configurations.compileOnly)
+    accessTransformerFiles = project.files('src/main/resources/META-INF/accesstransformer.cfg')
+}
+
+dependencies {
+    implementation "thedarkcolour:kotlinforforge:$kff_version"
+
+    accessCompileOnly("com.gregtechceu.gtceu:gtceu-1.20.1:$gtceu_version")
+    modImplementation("com.gregtechceu.gtceu:gtceu-1.20.1:$gtceu_version") { transitive = false }
+    modImplementation("com.lowdragmc.ldlib:ldlib-forge-1.20.1:$ldlib_version") { transitive = false }
+    modImplementation "com.tterrag.registrate:Registrate:MC1.20-1.3.11"
+    jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[MC1.20,MC1.21)")
+
+    modImplementation("appeng:appliedenergistics2-forge:$ae2_version") { transitive = false }
+    modImplementation "curse.maven:guideme-1173950:6489464"
+
+    for (extraModJar in fileTree(dir: "extra-mods", include: '*.jar')) {
+        def basename = extraModJar.name.substring(0, extraModJar.name.length() - ".jar".length())
+        def versionSep = basename.lastIndexOf('-')
+        assert versionSep != -1
+        def artifactId = basename.substring(0, versionSep)
+        def version = basename.substring(versionSep + 1)
+        modRuntimeOnly "extra-mods:$artifactId:$version"
+    }
+    compileOnly "org.jetbrains:annotations:26.0.2-1"
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1"))
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+                             forge_version       : forge_version, forge_version_range: forge_version_range,
+                             loader_version_range: loader_version_range,
+                             mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+                             mod_authors         : mod_authors, mod_description: mod_description,
+                             gtceu_version       : gtceu_version,]
+
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes(["Specification-Title"     : mod_id,
+                    "Specification-Vendor"    : mod_authors,
+                    "Specification-Version"   : "1",
+                    "Implementation-Title"    : project.name,
+                    "Implementation-Version"  : project.jar.archiveVersion,
+                    "Implementation-Vendor"   : mod_authors,
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+
+    finalizedBy 'reobfJar'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+tasks.withType(Jar).configureEach {
+    destinationDirectory.set(file("$rootDir/jar"))
+}
+mixin {
+    add sourceSets.main, "mixins.${mod_id}.refmap.json"
+    config "mixins.${mod_id}.json"
+}
+
+jar {
+    manifest {
+        attributes([
+                "MixinConfigs": "mixins.${mod_id}.json"
+        ])
+    }
+}
