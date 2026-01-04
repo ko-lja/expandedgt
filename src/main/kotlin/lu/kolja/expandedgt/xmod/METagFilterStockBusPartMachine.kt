@@ -9,6 +9,7 @@ import com.glodblock.github.extendedae.common.me.taglist.TagPriorityList
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity
 import com.gregtechceu.gtceu.integration.ae2.machine.MEStockingBusPartMachine
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder
 import lu.kolja.expandedgt.ExpandedGT
@@ -20,8 +21,10 @@ class METagFilterStockBusPartMachine(holder: IMachineBlockEntity): MEStockingBus
     val managedFieldHolder = ManagedFieldHolder(METagFilterStockBusPartMachine::class.java, MANAGED_FIELD_HOLDER)
 
     @Persisted
+    @DescSynced
     var whitelist = ""
     @Persisted
+    @DescSynced
     var blacklist = ""
 
     var filter: IPartitionList? = null
