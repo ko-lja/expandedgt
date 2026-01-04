@@ -10,12 +10,15 @@ import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity
 import com.gregtechceu.gtceu.integration.ae2.machine.MEStockingHatchPartMachine
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder
 import lu.kolja.expandedgt.ExpandedGT
 import lu.kolja.expandedgt.interfaces.ITagFilterPartMachine
 import net.minecraft.nbt.CompoundTag
 import java.util.*
 
 class METagFilterStockHatchPartMachine(holder: IMachineBlockEntity): MEStockingHatchPartMachine(holder), ITagFilterPartMachine {
+    val managedFieldHolder = ManagedFieldHolder(METagFilterStockHatchPartMachine::class.java, MANAGED_FIELD_HOLDER)
+
     @Persisted
     var whitelist = ""
     @Persisted
@@ -121,4 +124,6 @@ class METagFilterStockHatchPartMachine(holder: IMachineBlockEntity): MEStockingH
         this.blacklist = tagBlackList
         filter = TagPriorityList(whitelist, tagBlackList)
     }
+
+    override fun getFieldHolder() = managedFieldHolder
 }

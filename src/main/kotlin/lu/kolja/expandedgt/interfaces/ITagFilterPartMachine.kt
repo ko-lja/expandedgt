@@ -11,10 +11,12 @@ import com.gregtechceu.gtceu.api.machine.feature.IDropSaveMachine
 import com.gregtechceu.gtceu.api.transfer.fluid.CustomFluidTank
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture
-import com.lowdragmc.lowdraglib.gui.widget.*
+import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget
+import com.lowdragmc.lowdraglib.gui.widget.Widget
+import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup
 import com.lowdragmc.lowdraglib.utils.Position
 import lu.kolja.expandedgt.lang.ExpGuiText
-import lu.kolja.expandedgt.lang.ExpTooltips
 import lu.kolja.expandedgt.mixins.AccessorCustomFluidTank
 import lu.kolja.expandedgt.mixins.AccessorItemStackHandler
 import lu.kolja.expandedgt.util.literal
@@ -66,14 +68,14 @@ interface ITagFilterPartMachine: IDropSaveMachine {
 
         override fun createConfigurator(): Widget? {
             val whitelistField = MlTextField(
-                9, 16, 114, 32,
+                9, 6, 114, 32,
                 machine::getTagWhiteList,
                 machine::setTagWhiteList,
                 "...".literal()
             )
 
             val blacklistField = MlTextField(
-                9, 60, 114, 32,
+                9, 50, 114, 32,
                 machine::getTagBlackList,
                 machine::setTagBlackList,
                 "...".literal()
@@ -85,21 +87,24 @@ interface ITagFilterPartMachine: IDropSaveMachine {
             val blacklistWidget: StackHandlerWidget<*, *> =
                 if (isItem) PhantomSlot(CustomItemStackHandler(1)) else TankSlot(CustomFluidTank(1))
 
-            val group = WidgetGroup(-25, 0, 150, 140)
-                .addWidget(LabelWidget(9, 4) { ExpGuiText.Whitelist.translationKey })
+            val group = WidgetGroup(-25, 0, 150, 146)
+                .addWidget(LabelWidget(9, -4) { ExpGuiText.Whitelist.translationKey })
                 .addWidget(whitelistField)
                 .addWidget(whitelistWidget as Widget)
-                .addWidget(LabelWidget(9, 48) { ExpGuiText.Blacklist.translationKey })
+                .addWidget(LabelWidget(9, 40) { ExpGuiText.Blacklist.translationKey })
                 .addWidget(blacklistField)
                 .addWidget(blacklistWidget as Widget)
-                .addWidget(LabelWidget(0, 96) { ExpTooltips.TagFilter0.text })
-                .addWidget(LabelWidget(0, 112) { ExpTooltips.TagFilter1.text })
+                .addWidget(LabelWidget(10, 86) { ExpGuiText.Wildcard.translationKey })
+                .addWidget(LabelWidget(8, 102) { ExpGuiText.Priority.translationKey })
+                .addWidget(LabelWidget(9, 118) { ExpGuiText.AndOr.translationKey })
+                .addWidget(LabelWidget(9, 134) { ExpGuiText.XorNot.translationKey })
 
-            val container = DraggableScrollableWidgetGroup(0, 132, 140, 100)
+            val container = DraggableScrollableWidgetGroup(0, 149, group.sizeWidth, 80)
             container.setClientSideWidget()
                 .setActive(false)
                 .setVisible(false)
                 .setBackground(GuiTextures.BACKGROUND_INVERSE)
+                .setSelfPosition((group.sizeWidth - container.sizeWidth) / 2, group.sizeHeight)
 
             val callback: (StackHandlerWidget<*, *>, MlTextField) -> Runnable = { widget, field ->
                 Runnable {
@@ -185,10 +190,10 @@ interface ITagFilterPartMachine: IDropSaveMachine {
         override fun getStack() = customFluidTank.getFluidInTank(0)
 
         override fun setOnContentsChanged(onContentsChanged: Runnable) {
-            customFluidTank.onContentsChanged = {
+            customFluidTank.onContentsChanged = Runnable {
                 if (!isRemote) writeUpdateInfo(12) { it.writeBoolean(true) }
                 else onContentsChanged.run()
-            } as Runnable
+            }
         }
 
         override fun isEmpty() = getStack().isEmpty
