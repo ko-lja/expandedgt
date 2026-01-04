@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
+import org.lwjgl.glfw.GLFW
 import java.util.ArrayList
 import kotlin.math.max
 
@@ -186,14 +187,18 @@ class MlTextField(
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (!hasFocus) return false
 
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+            return false
+        }
+
         val handled = textField.keyPressed(keyCode)
         if (handled) {
             clampScroll()
             ensureCursorVisible()
             sendToServer()
-            return true
         }
-        return super.keyPressed(keyCode, scanCode, modifiers)
+
+        return true
     }
 
     override fun charTyped(codePoint: Char, modifiers: Int): Boolean {
