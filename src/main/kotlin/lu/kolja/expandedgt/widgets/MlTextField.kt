@@ -25,7 +25,7 @@ class MlTextField(
     private val textSupplier: () -> String,
     private val textConsumer: (String) -> Unit,
     private val placeholder: Component = Component.empty()
-) : WidgetGroup(x, y, width, height) {
+): WidgetGroup(x, y, width, height) {
 
     companion object {
         const val DEFAULT_MAX_LENGTH: Int = Int.MAX_VALUE
@@ -63,7 +63,7 @@ class MlTextField(
 
     fun setDirectly(newText: String) {
         setValue(newText)
-        sendToServer(force = true)
+        sendToServer(true)
     }
 
     private fun takeFocus() {
@@ -290,7 +290,7 @@ class MlTextField(
 
     private data class Line(val begin: Int, val end: Int)
 
-    private class CachedTextField(font: Font, w: Int) : MultilineTextField(font, w) {
+    private class CachedTextField(font: Font, w: Int): MultilineTextField(font, w) {
         private var cache: MutableList<Line>? = null
 
         data class Selection(val begin: Int, val end: Int)
@@ -308,7 +308,7 @@ class MlTextField(
             return c
         }
 
-        fun lineCount(): Int = cacheList().size
+        fun lineCount() = cacheList().size
 
         fun line(idx: Int): Line {
             val c = cacheList()
@@ -316,7 +316,7 @@ class MlTextField(
             return c[Mth.clamp(idx, 0, c.size - 1)]
         }
 
-        fun lineAtCursor(): Int = super.getLineAtCursor()
+        fun lineAtCursor() = super.getLineAtCursor()
 
         fun selection(): Selection {
             val sv = super.getSelected()

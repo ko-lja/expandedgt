@@ -17,6 +17,7 @@ import lu.kolja.expandedgt.lang.ExpGuiText
 import lu.kolja.expandedgt.lang.ExpTooltips
 import lu.kolja.expandedgt.mixins.AccessorCustomFluidTank
 import lu.kolja.expandedgt.mixins.AccessorItemStackHandler
+import lu.kolja.expandedgt.util.literal
 import lu.kolja.expandedgt.widgets.MlTextField
 import lu.kolja.expandedgt.widgets.TagLabelContainer
 import lu.kolja.expandedgt.xmod.METagFilterStockBusPartMachine
@@ -61,21 +62,21 @@ interface ITagFilterPartMachine: IDropSaveMachine {
     class TagFilterConfigurator(val machine: ITagFilterPartMachine): IFancyConfigurator {
         override fun getTitle(): Component = ExpGuiText.TagFilterConfig.text()
 
-        override fun getIcon(): IGuiTexture = GuiTextures.BUTTON_BLACKLIST.getSubTexture(0f, 0f, 20f, 20f)
+        override fun getIcon(): IGuiTexture = GuiTextures.BUTTON_BLACKLIST.getSubTexture(0f, 0f, 1f, .5f)
 
         override fun createConfigurator(): Widget? {
             val whitelistField = MlTextField(
                 9, 16, 114, 32,
                 machine::getTagWhiteList,
                 machine::setTagWhiteList,
-                placeholder = Component.literal("tag1 tag2...")
+                "...".literal()
             )
 
             val blacklistField = MlTextField(
                 9, 60, 114, 32,
                 machine::getTagBlackList,
                 machine::setTagBlackList,
-                placeholder = Component.literal("tag1 tag2...")
+                "...".literal()
             )
 
             val isItem = machine is METagFilterStockBusPartMachine
