@@ -1,6 +1,17 @@
 {
   "block.expandedgt.expanded_me_input_bus": "snᗺ ʇnduI ƎW pǝpuɐdxƎ",
   "block.expandedgt.expanded_me_input_hatch": "ɥɔʇɐH ʇnduI ƎW pǝpuɐdxƎ",
+  "block.expandedgt.expanded_me_stocking_input_bus": "snᗺ ʇnduI buıʞɔoʇS ƎW pǝpuɐdxƎ",
+  "block.expandedgt.expanded_me_stocking_input_hatch": "ɥɔʇɐH ʇnduI buıʞɔoʇS ƎW pǝpuɐdxƎ",
+  "block.expandedgt.me_tag_filter_stocking_bus": "snᗺ ʇnduI buıʞɔoʇS ɹǝʇןıℲ bɐ⟘ ƎW",
+  "block.expandedgt.me_tag_filter_stocking_hatch": "ɥɔʇɐH ʇnduI buıʞɔoʇS ɹǝʇןıℲ bɐ⟘ ƎW",
+  "gui.expandedgt.Blacklist": "ʇsıןʞɔɐןᗺ",
   "gui.expandedgt.CreativeTab": "⟘⅁ pǝpuɐdxƎ",
-  "gui.tooltips.expandedgt.EvenBigger": "sʇoןs 8§%sɐ§ ɥʇıʍ ʍou '8§%sq§ ɹǝbbıᗺ uǝʌƎ8§"
+  "gui.expandedgt.TagFilterConfig": "bıɟuoƆ ɹǝʇןıℲ bɐ⟘",
+  "gui.expandedgt.Whitelist": "ʇsıןǝʇıɥM",
+  "gui.tooltips.expandedgt.EvenBigger": "sʇoןs 8§%sɐ§ ɥʇıʍ ʍou '8§%sq§ ɹǝbbıᗺ uǝʌƎ8§",
+  "gui.tooltips.expandedgt.TagFilter0": "ʎʇıɹoıɹԀ sǝʇɐɔıpuI 8§)(q§ pɹɐɔpןıʍ ɐ sǝʇɐɔıpuI8§ *q§",
+  "gui.tooltips.expandedgt.TagFilter1": "ᴚOXɐ§ ןɐɔıboꞀ =8§ ^q§ ᴚOɐ§ ןɐɔıboꞀ =8§ |q§ ᗡNⱯɐ§ ןɐɔıboꞀ =8§ &q§",
+  "gui.tooltips.expandedgt.TagFilterInfo": "pɹɐoqdıןɔ ǝɥʇ oʇ sbɐʇ ʎdoɔ oʇ ʞɔıןɔ-ʇɥbıɹ 'ɹǝʇןıɟ ǝɥʇ oʇ sbɐʇ ppɐ oʇ ʞɔıןɔ-ʇɟǝꞀ",
+  "gui.tooltips.expandedgt.TagFilterMachineTooltip": "sbɐʇ ʎq ɹǝʇןıɟ osןɐ oʇ noʎ buıʍoןןɐ '8§%sq§ ǝɥʇ ɟo uoısɹǝʌ ɹǝʇʇǝq Ɐ8§"
 }

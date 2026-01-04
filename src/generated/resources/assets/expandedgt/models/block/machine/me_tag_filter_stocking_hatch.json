@@ -1,0 +1,56 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "gtceu:machine",
+  "machine": "expandedgt:me_tag_filter_stocking_hatch",
+  "replaceable_textures": [
+    "bottom",
+    "top",
+    "side"
+  ],
+  "variants": {
+    "is_formed=false,is_painted=false": {
+      "model": {
+        "parent": "gtceu:block/machine/template/part/hatch_machine",
+        "textures": {
+          "bottom": "gtceu:block/casings/voltage/uv/bottom",
+          "overlay": "expandedgt:block/overlay/ae2/me_tag_filter_stocking_hatch",
+          "side": "gtceu:block/casings/voltage/uv/side",
+          "top": "gtceu:block/casings/voltage/uv/top"
+        }
+      }
+    },
+    "is_formed=false,is_painted=true": {
+      "model": {
+        "parent": "gtceu:block/machine/template/part/hatch_machine_color_ring",
+        "textures": {
+          "bottom": "gtceu:block/casings/voltage/uv/bottom",
+          "overlay": "expandedgt:block/overlay/ae2/me_tag_filter_stocking_hatch",
+          "side": "gtceu:block/casings/voltage/uv/side",
+          "top": "gtceu:block/casings/voltage/uv/top"
+        }
+      }
+    },
+    "is_formed=true,is_painted=false": {
+      "model": {
+        "parent": "gtceu:block/machine/template/part/hatch_machine",
+        "textures": {
+          "bottom": "gtceu:block/casings/voltage/uv/bottom",
+          "overlay": "expandedgt:block/overlay/ae2/me_tag_filter_stocking_hatch",
+          "side": "gtceu:block/casings/voltage/uv/side",
+          "top": "gtceu:block/casings/voltage/uv/top"
+        }
+      }
+    },
+    "is_formed=true,is_painted=true": {
+      "model": {
+        "parent": "gtceu:block/machine/template/part/hatch_machine_color_ring",
+        "textures": {
+          "bottom": "gtceu:block/casings/voltage/uv/bottom",
+          "overlay": "expandedgt:block/overlay/ae2/me_tag_filter_stocking_hatch",
+          "side": "gtceu:block/casings/voltage/uv/side",
+          "top": "gtceu:block/casings/voltage/uv/top"
+        }
+      }
+    }
+  }
+}
