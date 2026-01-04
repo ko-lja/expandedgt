@@ -17,6 +17,7 @@ import lu.kolja.expandedgt.lang.ExpGuiText
 import lu.kolja.expandedgt.lang.ExpTooltips
 import lu.kolja.expandedgt.mixins.AccessorCustomFluidTank
 import lu.kolja.expandedgt.mixins.AccessorItemStackHandler
+import lu.kolja.expandedgt.widgets.MlTextField
 import lu.kolja.expandedgt.widgets.TagLabelContainer
 import lu.kolja.expandedgt.xmod.METagFilterStockBusPartMachine
 import net.minecraft.nbt.CompoundTag
@@ -63,50 +64,68 @@ interface ITagFilterPartMachine: IDropSaveMachine {
         override fun getIcon(): IGuiTexture = GuiTextures.BUTTON_BLACKLIST.getSubTexture(0f, 0f, 20f, 20f)
 
         override fun createConfigurator(): Widget? {
-            val whitelistField = TextField(9, 16, 114, 16, machine::getTagWhiteList, machine::setTagWhiteList)
-            val blacklistField = TextField(9, 48, 114, 16, machine::getTagBlackList, machine::setTagBlackList)
+            val whitelistField = MlTextField(
+                9, 16, 114, 32,
+                machine::getTagWhiteList,
+                machine::setTagWhiteList,
+                placeholder = Component.literal("tag1 tag2...")
+            )
+
+            val blacklistField = MlTextField(
+                9, 60, 114, 32,
+                machine::getTagBlackList,
+                machine::setTagBlackList,
+                placeholder = Component.literal("tag1 tag2...")
+            )
+
             val isItem = machine is METagFilterStockBusPartMachine
-            val whitelistWidget: StackHandlerWidget<*, *> = if (isItem) PhantomSlot(CustomItemStackHandler(1)) else TankSlot(CustomFluidTank(1))
-            val blacklistWidget: StackHandlerWidget<*, *> = if (isItem) PhantomSlot(CustomItemStackHandler(1)) else TankSlot(CustomFluidTank(1))
-            val group = WidgetGroup(-25, 0, 150, 100)
+            val whitelistWidget: StackHandlerWidget<*, *> =
+                if (isItem) PhantomSlot(CustomItemStackHandler(1)) else TankSlot(CustomFluidTank(1))
+            val blacklistWidget: StackHandlerWidget<*, *> =
+                if (isItem) PhantomSlot(CustomItemStackHandler(1)) else TankSlot(CustomFluidTank(1))
+
+            val group = WidgetGroup(-25, 0, 150, 140)
                 .addWidget(LabelWidget(9, 4) { ExpGuiText.Whitelist.translationKey })
                 .addWidget(whitelistField)
                 .addWidget(whitelistWidget as Widget)
-                .addWidget(LabelWidget(9, 36) { ExpGuiText.Blacklist.translationKey })
+                .addWidget(LabelWidget(9, 48) { ExpGuiText.Blacklist.translationKey })
                 .addWidget(blacklistField)
                 .addWidget(blacklistWidget as Widget)
-                .addWidget(LabelWidget(0, 68) { ExpTooltips.TagFilter0.text })
-                .addWidget(LabelWidget(0, 84) { ExpTooltips.TagFilter1.text })
+                .addWidget(LabelWidget(0, 96) { ExpTooltips.TagFilter0.text })
+                .addWidget(LabelWidget(0, 112) { ExpTooltips.TagFilter1.text })
 
-            val container = DraggableScrollableWidgetGroup(0, 100, 140, 100)
-            container.setClientSideWidget().setActive(false).setVisible(false).setBackground(GuiTextures.BACKGROUND_INVERSE)
-            val callback: (StackHandlerWidget<*, *>, TextField) -> Runnable = { widget, field ->
+            val container = DraggableScrollableWidgetGroup(0, 132, 140, 100)
+            container.setClientSideWidget()
+                .setActive(false)
+                .setVisible(false)
+                .setBackground(GuiTextures.BACKGROUND_INVERSE)
+
+            val callback: (StackHandlerWidget<*, *>, MlTextField) -> Runnable = { widget, field ->
                 Runnable {
-                    val tags = widget.getTags().map { it.location.toString() }
-                        .toList()
+                    val tags = widget.getTags().map { it.location.toString() }.toList()
 
                     val newWidgets = TagLabelContainer.createTagLabelContainer(field, tags)
                     container.clearAllWidgets()
                     container.addWidgets(*newWidgets)
+
                     if (!widget.isEmpty()) container.setVisible(true).isActive = true
                     else container.setVisible(false).isActive = false
                 }
             }
-            whitelistWidget.setOnContentsChanged(callback(whitelistWidget, whitelistField))
-            whitelistWidget.selfPosition = Position(whitelistField.selfPositionX + whitelistField.sizeWidth + 4, whitelistField.selfPositionY)
-            blacklistWidget.setOnContentsChanged(callback(blacklistWidget, blacklistField))
-            blacklistWidget.selfPosition = Position(blacklistField.selfPositionX + blacklistField.sizeWidth + 4, blacklistField.selfPositionY)
-            return group.addWidget(container)
-        }
-    }
 
-    class TextField(
-        x: Int, y: Int, width: Int, height: Int,
-        textSupplier: () -> String, textConsumer: (String) -> Unit)
-        : TextFieldWidget(x, y, width, height, textSupplier, textConsumer) {
-        fun setDirectly(newText: String) {
-            this.setCurrentString(newText)
-            this.writeClientAction(1) { it.writeUtf(newText) }
+            whitelistWidget.setOnContentsChanged(callback(whitelistWidget, whitelistField))
+            whitelistWidget.selfPosition = Position(
+                whitelistField.selfPositionX + whitelistField.sizeWidth + 4,
+                whitelistField.selfPositionY
+            )
+
+            blacklistWidget.setOnContentsChanged(callback(blacklistWidget, blacklistField))
+            blacklistWidget.selfPosition = Position(
+                blacklistField.selfPositionX + blacklistField.sizeWidth + 4,
+                blacklistField.selfPositionY
+            )
+
+            return group.addWidget(container)
         }
     }
 
