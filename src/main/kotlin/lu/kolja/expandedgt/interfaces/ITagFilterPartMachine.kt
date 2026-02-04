@@ -17,8 +17,8 @@ import com.lowdragmc.lowdraglib.gui.widget.Widget
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup
 import com.lowdragmc.lowdraglib.utils.Position
 import lu.kolja.expandedgt.lang.ExpGuiText
-import lu.kolja.expandedgt.mixins.AccessorCustomFluidTank
-import lu.kolja.expandedgt.mixins.AccessorItemStackHandler
+import lu.kolja.expandedgt.mixins.accessor.AccessorCustomFluidTank
+import lu.kolja.expandedgt.mixins.accessor.AccessorItemStackHandler
 import lu.kolja.expandedgt.util.literal
 import lu.kolja.expandedgt.widgets.MlTextField
 import lu.kolja.expandedgt.widgets.TagLabelContainer

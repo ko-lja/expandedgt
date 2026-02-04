@@ -1,4 +1,5 @@
 {
+  "block.expandedgt.dual_me_input_hatch": "Dual Me Input Hatch",
   "block.expandedgt.dual_me_output_hatch": "Dual ME Output Hatch",
   "block.expandedgt.expanded_me_input_bus": "Expanded ME Input Bus",
   "block.expandedgt.expanded_me_input_hatch": "Expanded ME Input Hatch",
@@ -14,9 +15,11 @@
   "gui.expandedgt.Whitelist": "Whitelist",
   "gui.expandedgt.Wildcard": "§b* §rIndicates a Wildcard",
   "gui.expandedgt.XorNot": "§b^ §r= §aXOR    §b! §r= §aNOT",
+  "gui.tooltips.expandedgt.BoundTo": "Bound to %s",
   "gui.tooltips.expandedgt.EvenBigger": "§8Even Bigger §b%s§8, now with §a%s§8 slots",
-  "gui.tooltips.expandedgt.TagFilter0": "§b* §8Indicates a wildcard §b()§8 Indicates Priority",
-  "gui.tooltips.expandedgt.TagFilter1": "§b& §8= Logical §aAND §b| §8= Logical §aOR §b^ §8= Logical §aXOR",
+  "gui.tooltips.expandedgt.LinkedTermHint": "§c§oNote: This will only pull blocks from your ME network, not your inventory",
+  "gui.tooltips.expandedgt.ShiftInfo": "§7Press §o[SHIFT] §r§7for more info",
   "gui.tooltips.expandedgt.TagFilterInfo": "Left-click to add tags to the filter, right-click to copy tags to the clipboard",
-  "gui.tooltips.expandedgt.TagFilterMachineTooltip": "§8A better version of the §b%s§8, allowing you to also filter by tags"
+  "gui.tooltips.expandedgt.TagFilterMachineTooltip": "§8A better version of the §b%s§8, allowing you to also filter by tags",
+  "item.expandedgt.linked_terminal": "Linked Terminal"
 }

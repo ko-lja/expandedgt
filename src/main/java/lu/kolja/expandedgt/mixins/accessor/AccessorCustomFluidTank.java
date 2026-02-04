@@ -1,4 +1,4 @@
-package lu.kolja.expandedgt.mixins;
+package lu.kolja.expandedgt.mixins.accessor;
 
 import com.gregtechceu.gtceu.api.transfer.fluid.CustomFluidTank;
 import org.spongepowered.asm.mixin.Mixin;

@@ -5,8 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "expandedgt.refmap.json",
   "mixins": [
-    "AccessorCustomFluidTank",
-    "AccessorItemStackHandler"
+    "accessor.AccessorCustomFluidTank",
+    "accessor.AccessorItemStackHandler",
+    "gtceu.MixinBlockPattern",
+    "gtceu.MixinMultiblockState",
+    "gtceu.MixinTerminalBehavior"
   ],
   "client": [
   ],

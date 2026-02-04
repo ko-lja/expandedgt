@@ -1,4 +1,5 @@
 {
+  "block.expandedgt.dual_me_input_hatch": "ɥɔʇɐH ʇnduI ǝW ןɐnᗡ",
   "block.expandedgt.dual_me_output_hatch": "ɥɔʇɐH ʇndʇnO ƎW ןɐnᗡ",
   "block.expandedgt.expanded_me_input_bus": "snᗺ ʇnduI ƎW pǝpuɐdxƎ",
   "block.expandedgt.expanded_me_input_hatch": "ɥɔʇɐH ʇnduI ƎW pǝpuɐdxƎ",
@@ -14,9 +15,11 @@
   "gui.expandedgt.Whitelist": "ʇsıןǝʇıɥM",
   "gui.expandedgt.Wildcard": "pɹɐɔpןıM ɐ sǝʇɐɔıpuIɹ§ *q§",
   "gui.expandedgt.XorNot": "⟘ONɐ§ =ɹ§ ¡q§    ᴚOXɐ§ =ɹ§ ^q§",
+  "gui.tooltips.expandedgt.BoundTo": "%s oʇ punoᗺ",
   "gui.tooltips.expandedgt.EvenBigger": "sʇoןs 8§%sɐ§ ɥʇıʍ ʍou '8§%sq§ ɹǝbbıᗺ uǝʌƎ8§",
-  "gui.tooltips.expandedgt.TagFilter0": "ʎʇıɹoıɹԀ sǝʇɐɔıpuI 8§)(q§ pɹɐɔpןıʍ ɐ sǝʇɐɔıpuI8§ *q§",
-  "gui.tooltips.expandedgt.TagFilter1": "ᴚOXɐ§ ןɐɔıboꞀ =8§ ^q§ ᴚOɐ§ ןɐɔıboꞀ =8§ |q§ ᗡNⱯɐ§ ןɐɔıboꞀ =8§ &q§",
+  "gui.tooltips.expandedgt.LinkedTermHint": "ʎɹoʇuǝʌuı ɹnoʎ ʇou 'ʞɹoʍʇǝu ƎW ɹnoʎ ɯoɹɟ sʞɔoןq ןןnd ʎןuo ןןıʍ sıɥ⟘ :ǝʇoNo§ɔ§",
+  "gui.tooltips.expandedgt.ShiftInfo": "oɟuı ǝɹoɯ ɹoɟㄥ§ɹ§ ]⟘ℲIHS[o§ ssǝɹԀㄥ§",
   "gui.tooltips.expandedgt.TagFilterInfo": "pɹɐoqdıןɔ ǝɥʇ oʇ sbɐʇ ʎdoɔ oʇ ʞɔıןɔ-ʇɥbıɹ 'ɹǝʇןıɟ ǝɥʇ oʇ sbɐʇ ppɐ oʇ ʞɔıןɔ-ʇɟǝꞀ",
-  "gui.tooltips.expandedgt.TagFilterMachineTooltip": "sbɐʇ ʎq ɹǝʇןıɟ osןɐ oʇ noʎ buıʍoןןɐ '8§%sq§ ǝɥʇ ɟo uoısɹǝʌ ɹǝʇʇǝq Ɐ8§"
+  "gui.tooltips.expandedgt.TagFilterMachineTooltip": "sbɐʇ ʎq ɹǝʇןıɟ osןɐ oʇ noʎ buıʍoןןɐ '8§%sq§ ǝɥʇ ɟo uoısɹǝʌ ɹǝʇʇǝq Ɐ8§",
+  "item.expandedgt.linked_terminal": "ןɐuıɯɹǝ⟘ pǝʞuıꞀ"
 }

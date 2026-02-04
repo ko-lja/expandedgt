@@ -37,15 +37,11 @@ abstract class DualMEHatchPartMachine(holder: IMachineBlockEntity, io: IO, tier:
     open val managedFieldHolder = ManagedFieldHolder(DualMEHatchPartMachine::class.java, MANAGED_FIELD_HOLDER)
 
     @Persisted
-    val tank: NotifiableFluidTank
-    var tankSubs: ISubscription? = null
-
-    var hasItemHandler = false
-    var hasFluidHandler = false
-
+    val fluidTank: NotifiableFluidTank
+    var iTankSubscription: ISubscription? = null
 
     init {
-        this.tank = createTank(INITIAL_TANK_CAPACITY, sqrt(this.inventorySize.toDouble()).toInt())
+        this.fluidTank = createTank(INITIAL_TANK_CAPACITY, sqrt(this.inventorySize.toDouble()).toInt())
         nodeHolder = createNodeHolder()
         this.actionSource = IActionSource.ofMachine(nodeHolder.getMainNode()::getNode)
     }
@@ -56,14 +52,14 @@ abstract class DualMEHatchPartMachine(holder: IMachineBlockEntity, io: IO, tier:
 
     override fun onLoad() {
         super.onLoad()
-        this.tankSubs = this.tank.addChangedListener(this::updateInventorySubscription)
+        this.iTankSubscription = this.fluidTank.addChangedListener(this::updateInventorySubscription)
     }
 
     override fun onUnload() {
         super.onUnload()
-        tankSubs?.let {
+        iTankSubscription?.let {
             it.unsubscribe()
-            tankSubs = null
+            iTankSubscription = null
         }
     }
 
@@ -105,6 +101,4 @@ abstract class DualMEHatchPartMachine(holder: IMachineBlockEntity, io: IO, tier:
     fun createNodeHolder(): GridNodeHolder {
         return GridNodeHolder(this)
     }
-
-
 }

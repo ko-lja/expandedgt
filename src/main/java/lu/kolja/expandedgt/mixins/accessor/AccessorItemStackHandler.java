@@ -1,4 +1,4 @@
-package lu.kolja.expandedgt.mixins;
+package lu.kolja.expandedgt.mixins.accessor;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;

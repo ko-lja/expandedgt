@@ -160,6 +160,10 @@ dependencies {
         def version = basename.substring(versionSep + 1)
         modRuntimeOnly "extra-mods:$artifactId:$version"
     }
+    // QOL
+    modRuntimeOnly "curse.maven:jade-324717:6855440"
+    modRuntimeOnly "curse.maven:emi-580555:6420945"
+
     compileOnly "org.jetbrains:annotations:26.0.2-1"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))

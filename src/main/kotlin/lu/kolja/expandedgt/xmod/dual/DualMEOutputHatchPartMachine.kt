@@ -6,6 +6,7 @@ import appeng.api.stacks.AEItemKey
 import com.gregtechceu.gtceu.api.capability.recipe.IO
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity
 import com.gregtechceu.gtceu.api.machine.MetaMachine
+import com.gregtechceu.gtceu.api.machine.feature.IDropSaveMachine
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler
 import com.gregtechceu.gtceu.api.recipe.GTRecipe
@@ -20,14 +21,17 @@ import com.lowdragmc.lowdraglib.gui.widget.Widget
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder
+import lu.kolja.expandedgt.xmod.dual.DualMEHatchPartMachine
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.world.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.capability.IFluidHandler
 import java.util.*
 import java.util.function.IntFunction
 
-class DualMEOutputHatchPartMachine(holder: IMachineBlockEntity, io: IO, tier: Int): DualMEHatchPartMachine(holder, io, tier) {
-    override val managedFieldHolder = ManagedFieldHolder(DualMEOutputHatchPartMachine::class.java, MANAGED_FIELD_HOLDER)
+class DualMEOutputHatchPartMachine(holder: IMachineBlockEntity, tier: Int): DualMEHatchPartMachine(holder, IO.OUT, tier), IDropSaveMachine {
+    override val managedFieldHolder = ManagedFieldHolder(DualMEOutputHatchPartMachine::class.java, super.managedFieldHolder)
 
     @Persisted
     lateinit var internalItemBuffer: KeyStorage
@@ -37,6 +41,22 @@ class DualMEOutputHatchPartMachine(holder: IMachineBlockEntity, io: IO, tier: In
     override fun createInventory(vararg args: Any?): NotifiableItemStackHandler {
         this.internalItemBuffer = KeyStorage()
         return InaccessibleInfiniteHandler(this)
+    }
+
+    override fun saveToItem(tag: CompoundTag) {
+        super.saveToItem(tag)
+        tag.put("internalItemBuffer", internalItemBuffer.serializeNBT())
+        tag.put("internalFluidBuffer", internalFluidBuffer.serializeNBT())
+    }
+
+    override fun loadFromItem(tag: CompoundTag) {
+        super.loadFromItem(tag)
+        internalItemBuffer.deserializeNBT(tag.get("internalItemBuffer") as ListTag)
+        internalFluidBuffer.deserializeNBT(tag.get("internalFluidBuffer") as ListTag)
+    }
+
+    override fun onLoad() {
+        super.onLoad()
     }
 
     override fun createTank(
@@ -139,14 +159,16 @@ class DualMEOutputHatchPartMachine(holder: IMachineBlockEntity, io: IO, tier: In
                     val ingredient = it.next()
                     if (ingredient.isEmpty) it.remove()
                     else {
-                        val fluids = ingredient.stacks
-                        if (fluids.size != 0 && !fluids[0]!!.isEmpty) {
-                            val output = fluids[0]
-                            ingredient.shrink(storage.fill(output!!, action))
-                            if (ingredient.amount <= 0) it.remove()
-                        } else {
-                            it.remove()
+                        val fluids = ingredient.getStacks()
+                        fluids?.let { array ->
+                            if (array.size != 0 && !array[0]!!.isEmpty) {
+                                val output = array[0]
+                                ingredient.shrink(storage.fill(output!!, action))
+                                if (ingredient.amount <= 0) it.remove()
+                                continue
+                            }
                         }
+                        it.remove()
                     }
                 }
                 return left.ifEmpty { null }
@@ -165,13 +187,13 @@ class DualMEOutputHatchPartMachine(holder: IMachineBlockEntity, io: IO, tier: In
         ): Int {
             val key = AEFluidKey.of(resource.fluid, resource.tag)
             val amount = resource.amount
-            val oldValue = GTMath.saturatedCast(internalFluidBuffer.storage.getOrDefault(key, 0))
-            val changeValue = (Integer.MAX_VALUE - oldValue).coerceAtMost(amount)
+            val oldValue = internalFluidBuffer.storage.getOrDefault(key, 0)
+            val changeValue = (Long.MAX_VALUE - oldValue).coerceAtMost(amount.toLong())
             if (changeValue > 0 && action.execute()) {
-                internalFluidBuffer.storage.put(key, (oldValue + changeValue).toLong())
+                internalFluidBuffer.storage.put(key, oldValue + changeValue)
                 internalFluidBuffer.onChanged()
             }
-            return changeValue
+            return GTMath.saturatedCast(changeValue)
         }
 
         override fun supportsFill(tank: Int) = false
