@@ -100,7 +100,7 @@ object ExpandedGTMachines {
     val DualMEInputHatch: MachineDefinition = REGISTRATE
         .machine("dual_me_input_hatch") {
             DualMEInputHatchPartMachine(it, ZPM)
-        }
+        }.langValue("Dual ME Input Hatch")
         .tier(ZPM)
         .rotationState(RotationState.ALL)
         .abilities(PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_ITEMS)
