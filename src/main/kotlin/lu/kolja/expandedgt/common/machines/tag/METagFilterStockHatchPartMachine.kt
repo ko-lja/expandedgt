@@ -47,6 +47,8 @@ class METagFilterStockHatchPartMachine(holder: IMachineBlockEntity): MEStockingH
 
         val storage = grid.storageService.inventory
         val queue = PriorityQueue<GenericStack>(CONFIG_SIZE, compareBy { it.amount })
+        var list = ArrayList<GenericStack>()
+        list.add(e)
 
         try {
             for (entry in counter) {

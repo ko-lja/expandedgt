@@ -34,9 +34,14 @@ open class ExpMEInputBusPartMachine(holder: IMachineBlockEntity, vararg args: An
         group.addWidget(LabelWidget(3, 0,
             if (this.isOnline) "gtceu.gui.me_network.online" else "gtceu.gui.me_network.offline"
         ))
-//        val left = this.aeItemHandler.inventory.copyOfRange(0, SIZE / 2)
-//        val right = this.aeItemHandler.inventory.copyOfRange(SIZE / 2, SIZE)
-        group.addWidget(ExpAEItemConfigWidget(3, 10, aeItemHandler, this.aeItemHandler.inventory))
+        val left = this.aeItemHandler.inventory.copyOfRange(0, SIZE / 2)
+        val right = this.aeItemHandler.inventory.copyOfRange(SIZE / 2, SIZE)
+        val firstWidget = ExpAEItemConfigWidget(3, 10, aeItemHandler, left)
+        val secondWidget = ExpAEItemConfigWidget(3, 10 + 76, aeItemHandler, right)
+        firstWidget.otherWidget = secondWidget
+        secondWidget.otherWidget = firstWidget
+        group.addWidget(firstWidget)
+        group.addWidget(secondWidget)
         return group
     }
 

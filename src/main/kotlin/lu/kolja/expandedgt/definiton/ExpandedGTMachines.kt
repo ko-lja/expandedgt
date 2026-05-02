@@ -8,6 +8,7 @@ import lu.kolja.expandedgt.ExpandedGT
 import lu.kolja.expandedgt.ExpandedGT.Companion.REGISTRATE
 import lu.kolja.expandedgt.common.machines.dual.DualMEInputHatchPartMachine
 import lu.kolja.expandedgt.common.machines.dual.DualMEOutputHatchPartMachine
+import lu.kolja.expandedgt.common.machines.dual.DualMEStockingInputHatchPartMachine
 import lu.kolja.expandedgt.common.machines.input.ExpMEInputBusPartMachine
 import lu.kolja.expandedgt.common.machines.input.ExpMEInputHatchPartMachine
 import lu.kolja.expandedgt.common.machines.input.stocking.ExpMEStockingBusPartMachine
@@ -110,6 +111,19 @@ object ExpandedGTMachines {
         .abilities(PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_ITEMS)
         .colorOverlayTieredHullModel(ExpandedGT.makeId("block/overlay/ae2/dual_me_input_hatch"))
         .tooltips(ExpTooltips.DualHatch.text("block.gtceu.me_input_bus".translate(), "block.gtceu.me_input_hatch".translate()))
+        .sharedPart()
+        .register()
+
+    val DualMEStockingInputHatch: MachineDefinition = REGISTRATE
+        .machine("dual_me_stocking_input_hatch") {
+            DualMEStockingInputHatchPartMachine(it, ZPM)
+        }
+        .langValue("Dual ME Stocking Input Hatch")
+        .tier(ZPM)
+        .rotationState(RotationState.ALL)
+        .abilities(PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_ITEMS)
+        .colorOverlayTieredHullModel(ExpandedGT.makeId("block/overlay/ae2/dual_me_input_hatch"))
+        .tooltips(ExpTooltips.DualHatch.text("block.gtceu.me_stocking_input_bus".translate(), "block.gtceu.me_stocking_input_hatch".translate()))
         .sharedPart()
         .register()
 }
