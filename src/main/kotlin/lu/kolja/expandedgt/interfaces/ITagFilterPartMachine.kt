@@ -21,13 +21,16 @@ import lu.kolja.expandedgt.lang.ExpGuiText
 import lu.kolja.expandedgt.mixins.accessor.AccessorCustomFluidTank
 import lu.kolja.expandedgt.mixins.accessor.AccessorItemStackHandler
 import lu.kolja.expandedgt.util.literal
-import lu.kolja.expandedgt.widgets.MlTextField
 import lu.kolja.expandedgt.widgets.TagLabelContainer
+import lu.kolja.expandedgt.widgets.TagTextFieldFactory
+import lu.kolja.expandedgt.widgets.TagTextFieldWidget
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.ItemStack
+import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.fml.loading.FMLEnvironment
 import net.minecraftforge.fluids.FluidStack
 import java.util.stream.Stream
 
@@ -67,14 +70,14 @@ interface ITagFilterPartMachine: IDropSaveMachine {
         override fun getIcon(): IGuiTexture = GuiTextures.BUTTON_BLACKLIST.getSubTexture(0f, 0f, 1f, .5f)
 
         override fun createConfigurator(): Widget? {
-            val whitelistField = MlTextField(
+            val whitelistField = TagTextFieldFactory.create(
                 9, 6, 114, 32,
                 machine::getTagWhiteList,
                 machine::setTagWhiteList,
                 "...".literal()
             )
 
-            val blacklistField = MlTextField(
+            val blacklistField = TagTextFieldFactory.create(
                 9, 50, 114, 32,
                 machine::getTagBlackList,
                 machine::setTagBlackList,
@@ -106,11 +109,13 @@ interface ITagFilterPartMachine: IDropSaveMachine {
                 .setBackground(GuiTextures.BACKGROUND_INVERSE)
                 .setSelfPosition((group.sizeWidth - container.sizeWidth) / 2, group.sizeHeight)
 
-            val callback: (StackHandlerWidget<*, *>, MlTextField) -> Runnable = { widget, field ->
+            val callback: (StackHandlerWidget<*, *>, TagTextFieldWidget) -> Runnable = { widget, field ->
                 Runnable {
                     val tags = widget.getTags().map { it.location.toString() }.toList()
 
-                    val newWidgets = TagLabelContainer.createTagLabelContainer(field, tags)
+                    val newWidgets =
+                        if (FMLEnvironment.dist == Dist.CLIENT) TagLabelContainer.createTagLabelContainer(field, tags)
+                        else emptyArray<Widget?>()
                     container.clearAllWidgets()
                     container.addWidgets(*newWidgets)
 

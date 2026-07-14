@@ -1,13 +1,11 @@
 package lu.kolja.expandedgt.widgets
 
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.Util
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.MultilineTextField
-import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
 import net.minecraftforge.api.distmarker.Dist
@@ -21,15 +19,12 @@ class MlTextField(
     y: Int,
     width: Int,
     height: Int,
-    private val textSupplier: () -> String,
-    private val textConsumer: (String) -> Unit,
-    private val placeholder: Component = Component.empty()
-): WidgetGroup(x, y, width, height) {
+    textSupplier: () -> String,
+    textConsumer: (String) -> Unit,
+    placeholder: Component = Component.empty()
+): TagTextFieldWidget(x, y, width, height, textSupplier, textConsumer, placeholder) {
 
     companion object {
-        const val DEFAULT_MAX_LENGTH: Int = Int.MAX_VALUE
-        private const val ACTION_SET_TEXT = 1
-
         private var focusedField: MlTextField? = null
     }
 
@@ -52,7 +47,7 @@ class MlTextField(
         lastSent = init
     }
 
-    fun getValue(): String = textField.value()
+    override fun getValue(): String = textField.value()
 
     fun setValue(v: String) {
         textField.setValue(v)
@@ -60,7 +55,7 @@ class MlTextField(
         ensureCursorVisible()
     }
 
-    fun setDirectly(newText: String) {
+    override fun setDirectly(newText: String) {
         setValue(newText)
         sendToServer(true)
     }
@@ -83,18 +78,9 @@ class MlTextField(
         val v = getValue()
         textConsumer(v)
         if (force || v != lastSent) {
-            writeClientAction(ACTION_SET_TEXT) { buf -> buf.writeUtf(v) }
+            sendToServer(v)
             lastSent = v
         }
-    }
-
-    override fun handleClientAction(id: Int, buffer: FriendlyByteBuf) {
-        if (id == ACTION_SET_TEXT) {
-            val v = buffer.readUtf(DEFAULT_MAX_LENGTH)
-            textConsumer(v)
-            return
-        }
-        super.handleClientAction(id, buffer)
     }
 
     private fun getMaxScroll(): Double {
