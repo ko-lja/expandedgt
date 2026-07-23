@@ -1,8 +1,6 @@
 package lu.kolja.expandedgt.widgets
 
 import net.minecraft.network.chat.Component
-import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.fml.loading.FMLEnvironment
 
 object TagTextFieldFactory {
     private const val CLIENT_TEXT_FIELD = "lu.kolja.expandedgt.widgets.MlTextField"
@@ -16,13 +14,10 @@ object TagTextFieldFactory {
         textConsumer: (String) -> Unit,
         placeholder: Component = Component.empty()
     ): TagTextFieldWidget {
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            return createClientTextField(x, y, width, height, textSupplier, textConsumer, placeholder)
-        }
-        return TagTextFieldWidget(x, y, width, height, textSupplier, textConsumer, placeholder)
+        return createTextField(x, y, width, height, textSupplier, textConsumer, placeholder)
     }
 
-    private fun createClientTextField(
+    private fun createTextField(
         x: Int,
         y: Int,
         width: Int,

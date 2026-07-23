@@ -53,7 +53,7 @@ class ExpMEStockingHatchPartMachine(holder: IMachineBlockEntity, vararg args: An
     private var minStackSize: Int = 1
     @Persisted
     @DropSaved
-    private var ticksPerCycle: Int = 40
+    private var stockingTicksPerCycle: Int = 40
 
     @Setter
     private var autoPullTest: Predicate<GenericStack>? = null
@@ -85,8 +85,8 @@ class ExpMEStockingHatchPartMachine(holder: IMachineBlockEntity, vararg args: An
 
     override fun autoIO() {
         super.autoIO()
-        if (ticksPerCycle == 0) ticksPerCycle = ConfigHolder.INSTANCE.compat.ae2.updateIntervals
-        if (offsetTimer.toInt() % ticksPerCycle == 0) {
+        if (getTicksPerCycle() == 0) setTicksPerCycle(ConfigHolder.INSTANCE.compat.ae2.updateIntervals)
+        if (offsetTimer.toInt() % getTicksPerCycle() == 0) {
             if (autoPull) refreshList()
             syncME()
         }
@@ -143,10 +143,10 @@ class ExpMEStockingHatchPartMachine(holder: IMachineBlockEntity, vararg args: An
         this.minStackSize = newSize
     }
 
-    override fun getTicksPerCycle() = this.ticksPerCycle
+    override fun getTicksPerCycle(): Int = stockingTicksPerCycle
 
     override fun setTicksPerCycle(newSize: Int) {
-        this.ticksPerCycle = newSize
+        stockingTicksPerCycle = newSize
     }
 
     override fun isAutoPull() = autoPull

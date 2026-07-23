@@ -8,12 +8,9 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.MultilineTextField
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
-import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.api.distmarker.OnlyIn
 import org.lwjgl.glfw.GLFW
 import kotlin.math.max
 
-@OnlyIn(Dist.CLIENT)
 class MlTextField(
     x: Int,
     y: Int,
@@ -28,13 +25,8 @@ class MlTextField(
         private var focusedField: MlTextField? = null
     }
 
-    private val font: Font = Minecraft.getInstance().font
-
-    private val textField = CachedTextField(font, width - 4).apply {
-        setCharacterLimit(DEFAULT_MAX_LENGTH)
-        setCursorListener { clampScroll(); ensureCursorVisible() }
-        setValueListener { clampScroll(); ensureCursorVisible() }
-    }
+    private lateinit var font: Font
+    private lateinit var textField: CachedTextField
 
     private var scrollAmount = 0.0
     private var dragging = false
@@ -42,12 +34,20 @@ class MlTextField(
     private var lastSent: String = ""
 
     init {
-        val init = textSupplier()
-        textField.setValue(init)
-        lastSent = init
+        if (isRemote) {
+            font = Minecraft.getInstance().font
+            textField = CachedTextField(font, width - 4).apply {
+                setCharacterLimit(DEFAULT_MAX_LENGTH)
+                setCursorListener { clampScroll(); ensureCursorVisible() }
+                setValueListener { clampScroll(); ensureCursorVisible() }
+            }
+            val init = textSupplier()
+            textField.setValue(init)
+            lastSent = init
+        }
     }
 
-    override fun getValue(): String = textField.value()
+    override fun getValue(): String = if (isRemote) textField.value() else super.getValue()
 
     fun setValue(v: String) {
         textField.setValue(v)

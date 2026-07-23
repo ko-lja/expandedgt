@@ -120,6 +120,13 @@ repositories {
             includeGroup 'com.gregtechceu.gtceu'
         }
     }
+    maven {
+        name = 'tterrag'
+        url = 'https://maven.tterrag.com'
+        content {
+            includeGroup 'com.tterrag.registrate'
+        }
+    }
     maven { // Registrate
         url "https://repo.expandium.net/releases"
     }
@@ -145,7 +152,7 @@ dependencies {
     modImplementation("com.gregtechceu.gtceu:gtceu-1.20.1:$gtceu_version") { transitive = false }
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-1.20.1:$ldlib_version") { transitive = false }
     modImplementation "com.tterrag.registrate:Registrate:MC1.20-1.3.11"
-    jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[MC1.20,MC1.21)")
+    jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "MC1.20-1.3.11")
 
     modImplementation("appeng:appliedenergistics2-forge:$ae2_version") { transitive = false }
     modImplementation "curse.maven:guideme-1173950:6489464"

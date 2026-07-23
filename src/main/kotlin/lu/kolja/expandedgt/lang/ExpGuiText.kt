@@ -8,6 +8,8 @@ enum class ExpGuiText(val text: String) : LocalizationEnum {
     Whitelist("Whitelist"),
     Blacklist("Blacklist"),
     // Tag Filter Config Widget Operator descriptions
+    TagSamples("Sample Tags"),
+    TagOperators("Use *, (), &, |, ^, !"),
     Wildcard("§b* §rIndicates a Wildcard"),
     Priority("§b() §rIndicates Priority"),
     AndOr("§b& §r= §aAND    §b| §r= §aOR"),

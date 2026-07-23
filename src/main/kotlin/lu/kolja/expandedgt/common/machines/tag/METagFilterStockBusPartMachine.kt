@@ -7,7 +7,11 @@ import appeng.api.stacks.GenericStack
 import appeng.util.prioritylist.IPartitionList
 import com.glodblock.github.extendedae.common.me.taglist.TagPriorityList
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel
+import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity
+import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CombinedDirectionalFancyConfigurator
+import com.gregtechceu.gtceu.api.machine.feature.IInteractedMachine
+import com.gregtechceu.gtceu.common.machine.owner.MachineOwner
 import com.gregtechceu.gtceu.integration.ae2.machine.MEStockingBusPartMachine
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted
@@ -15,9 +19,15 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder
 import lu.kolja.expandedgt.ExpandedGT
 import lu.kolja.expandedgt.interfaces.ITagFilterPartMachine
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.BlockHitResult
 import java.util.*
 
-open class METagFilterStockBusPartMachine(holder: IMachineBlockEntity): MEStockingBusPartMachine(holder), ITagFilterPartMachine {
+open class METagFilterStockBusPartMachine(holder: IMachineBlockEntity): MEStockingBusPartMachine(holder), ITagFilterPartMachine, IInteractedMachine {
     val managedFieldHolder = ManagedFieldHolder(METagFilterStockBusPartMachine::class.java, MANAGED_FIELD_HOLDER)
 
     @Persisted
@@ -88,6 +98,24 @@ open class METagFilterStockBusPartMachine(holder: IMachineBlockEntity): MEStocki
     override fun attachConfigurators(configuratorPanel: ConfiguratorPanel) {
         super.attachConfigurators(configuratorPanel)
         configuratorPanel.attachConfigurators(ITagFilterPartMachine.TagFilterConfigurator(this))
+    }
+
+    override fun attachSideTabs(sideTabs: TabsWidget) {
+        sideTabs.mainTab = this
+        sideTabs.attachSubTab(CombinedDirectionalFancyConfigurator.of(this, this))
+    }
+
+    override fun onUse(
+        state: BlockState,
+        world: Level,
+        pos: net.minecraft.core.BlockPos,
+        player: Player,
+        hand: InteractionHand,
+        hit: BlockHitResult
+    ): InteractionResult {
+        val allowed = MachineOwner.canOpenOwnerMachine(player, this)
+        if (!allowed) return InteractionResult.PASS
+        return tryToOpenUI(player, hand, hit)
     }
 
     override fun writeConfigToTag(): CompoundTag {

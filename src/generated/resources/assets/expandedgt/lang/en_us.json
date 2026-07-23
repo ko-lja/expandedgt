@@ -15,6 +15,8 @@
   "gui.expandedgt.CreativeTab": "Expanded GT",
   "gui.expandedgt.Priority": "§b() §rIndicates Priority",
   "gui.expandedgt.TagFilterConfig": "Tag Filter Config",
+  "gui.expandedgt.TagOperators": "Use *, (), &, |, ^, !",
+  "gui.expandedgt.TagSamples": "Sample Tags",
   "gui.expandedgt.Whitelist": "Whitelist",
   "gui.expandedgt.Wildcard": "§b* §rIndicates a Wildcard",
   "gui.expandedgt.XorNot": "§b^ §r= §aXOR    §b! §r= §aNOT",
