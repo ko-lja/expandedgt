@@ -18,6 +18,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import lu.kolja.expandedgt.interfaces.IBlockPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -66,6 +67,9 @@ public abstract class MixinBlockPattern implements IBlockPattern {
     @Unique
     @Override
     public void exAutoBuild(Player player, MultiblockState worldState, IGrid grid, boolean useHatches) {
+        Map<AEItemKey, Integer> missingItems = new HashMap<>();
+        Map<AEItemKey, Integer> extractionFailedItems = new HashMap<>();
+        Map<AEItemKey, Integer> placementFailedItems = new HashMap<>();
         Level world = player.level();
         int minZ = -centerOffset[4];
         worldState.clean();
@@ -78,6 +82,9 @@ public abstract class MixinBlockPattern implements IBlockPattern {
         Object2IntOpenHashMap<SimplePredicate> cacheLayer = worldState.getLayerCount();
         Map<BlockPos, Object> blocks = new HashMap<>();
         Set<BlockPos> placeBlockPos = new HashSet<>();
+        var meInventory = grid.getStorageService().getInventory();
+        var meContents = player.isCreative() ? null : meInventory.getAvailableStacks();
+        var actionSource = player.isCreative() ? null : new PlayerSource(player);
         blocks.put(centerPos, controller);
         for (int c = 0, z = minZ++, r; c < this.fingerLength; c++) {
             for (r = 0; r < aisleRepetitions[c][0]; r++) {
@@ -158,41 +165,51 @@ public abstract class MixinBlockPattern implements IBlockPattern {
                                     }
                                 }
                             }
+                            if (candidates.isEmpty()) continue;
 
-                            // check inventory
                             ItemStack found = null;
                             AEItemKey key = null;
-                            var meInv = grid.getStorageService().getInventory();
                             if (!player.isCreative()) {
-                                var inventoryCounter = new KeyCounter();
-                                for (var item : player.getInventory().items) {
-                                    inventoryCounter.add(AEItemKey.of(item), item.getCount());
-                                }
-                                key = eae$getMatchStackWithHandler(candidates, inventoryCounter, useHatches);
+                                key = eae$getAvailableCandidate(candidates, meContents, useHatches);
                                 if (key == null) {
-                                    var counter = meInv.getAvailableStacks();
-                                    key = eae$getMatchStackWithHandler(candidates, counter, useHatches);
+                                    AEItemKey missing = eae$getFirstAllowedCandidate(candidates, useHatches);
+                                    if (missing != null) missingItems.merge(missing, 1, Integer::sum);
+                                    continue;
                                 }
-                                if (key == null) continue; // No match found in either inventory or me system
                                 found = key.toStack();
                             } else {
                                 for (ItemStack candidate : candidates) {
+                                    if (!eae$isAllowedCandidate(candidate, useHatches)) continue;
                                     found = candidate.copy();
-                                    if (!found.isEmpty() && found.getItem() instanceof BlockItem) {
-                                        break;
-                                    }
-                                    found = null;
+                                    break;
                                 }
                             }
-                            if (found == null) continue;
+                            if (found == null) {
+                                continue;
+                            }
                             BlockItem itemBlock = (BlockItem) found.getItem();
                             BlockPlaceContext context = new BlockPlaceContext(world, player, InteractionHand.MAIN_HAND,
                                     found, BlockHitResult.miss(player.getEyePosition(0), Direction.UP, pos));
+
+                            if (key != null) {
+                                long extracted = meInventory.extract(key, 1, Actionable.MODULATE, actionSource);
+                                if (extracted != 1) {
+                                    meContents.set(key, 0);
+                                    extractionFailedItems.merge(key, 1, Integer::sum);
+                                    continue;
+                                }
+                                meContents.remove(key, 1);
+                            }
+
                             InteractionResult interactionResult = itemBlock.place(context);
                             if (interactionResult != InteractionResult.FAIL) {
                                 placeBlockPos.add(pos);
+                            } else {
+                                AEItemKey failed = AEItemKey.of(found);
+                                if (failed != null) placementFailedItems.merge(failed, 1, Integer::sum);
                                 if (key != null) {
-                                    grid.getStorageService().getInventory().extract(key, 1, Actionable.MODULATE, new PlayerSource(player));
+                                    meInventory.insert(key, 1, Actionable.MODULATE, actionSource);
+                                    meContents.add(key, 1);
                                 }
                             }
                             if (world.getBlockEntity(pos) instanceof IMachineBlockEntity machineBlockEntity) {
@@ -226,20 +243,63 @@ public abstract class MixinBlockPattern implements IBlockPattern {
                 }
             }
         });
+        eae$sendFailureReport(player, missingItems, extractionFailedItems, placementFailedItems);
     }
 
     @Unique
     @Nullable
-    private static AEItemKey eae$getMatchStackWithHandler(List<ItemStack> candidates, KeyCounter storageContents, boolean useHatches) {
-        for (var entry : storageContents) {
-            var key = entry.getKey();
-            if (candidates.stream().anyMatch(
-                    stack -> AEItemKey.matches(key, stack) && entry.getLongValue() > 0 &&
-                            (useHatches || stack.getItem() instanceof BlockItem blockItem && !(blockItem instanceof MetaMachineItem))
-            )) {
-                return (AEItemKey) key;
-            }
+    private static AEItemKey eae$getAvailableCandidate(List<ItemStack> candidates, KeyCounter storageContents, boolean useHatches) {
+        for (ItemStack candidate : candidates) {
+            if (!eae$isAllowedCandidate(candidate, useHatches)) continue;
+
+            AEItemKey key = AEItemKey.of(candidate);
+            if (key != null && storageContents.get(key) > 0) return key;
         }
         return null;
     }
+
+    @Unique
+    @Nullable
+    private static AEItemKey eae$getFirstAllowedCandidate(List<ItemStack> candidates, boolean useHatches) {
+        for (ItemStack candidate : candidates) {
+            if (!eae$isAllowedCandidate(candidate, useHatches)) continue;
+            AEItemKey key = AEItemKey.of(candidate);
+            if (key != null) return key;
+        }
+        return null;
+    }
+
+    @Unique
+    private static void eae$sendFailureReport(
+            Player player,
+            Map<AEItemKey, Integer> missingItems,
+            Map<AEItemKey, Integer> extractionFailedItems,
+            Map<AEItemKey, Integer> placementFailedItems) {
+        if (missingItems.isEmpty() && extractionFailedItems.isEmpty() && placementFailedItems.isEmpty()) return;
+
+        int missing = missingItems.values().stream().mapToInt(Integer::intValue).sum();
+        int extractionFailed = extractionFailedItems.values().stream().mapToInt(Integer::intValue).sum();
+        int placementFailed = placementFailedItems.values().stream().mapToInt(Integer::intValue).sum();
+        player.sendSystemMessage(Component.literal(
+                "Linked Terminal: " + missing + " missing, " + extractionFailed + " extraction failures, " +
+                        placementFailed + " placement failures."));
+        eae$sendItemList(player, "Missing", missingItems);
+        eae$sendItemList(player, "Extraction failed", extractionFailedItems);
+        eae$sendItemList(player, "Placement failed", placementFailedItems);
+    }
+
+    @Unique
+    private static void eae$sendItemList(Player player, String label, Map<AEItemKey, Integer> items) {
+        for (var entry : items.entrySet()) {
+            player.sendSystemMessage(Component.literal("  " + label + ": " + entry.getValue() + "x ")
+                    .append(entry.getKey().toStack().getHoverName()));
+        }
+    }
+
+    @Unique
+    private static boolean eae$isAllowedCandidate(ItemStack candidate, boolean useHatches) {
+        if (candidate.isEmpty() || !(candidate.getItem() instanceof BlockItem blockItem)) return false;
+        return useHatches || !(blockItem instanceof MetaMachineItem);
+    }
+
 }

@@ -2,7 +2,6 @@ package lu.kolja.expandedgt.items.linked
 
 import appeng.core.localization.GuiText
 import appeng.core.localization.Tooltips
-import com.gregtechceu.gtceu.api.item.component.IInteractionItem
 import com.gregtechceu.gtceu.api.machine.MetaMachine
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController
 import lu.kolja.expandedgt.interfaces.IBlockPattern
@@ -16,6 +15,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
+import lu.kolja.expandedgt.menu.LinkedTerminalMenu
 
 class LinkedTerminalItem(properties: Properties): LinkedItem(properties) {
 
@@ -30,7 +30,12 @@ class LinkedTerminalItem(properties: Properties): LinkedItem(properties) {
         if (machine.isFormed) return InteractionResult.PASS // TODO: destroy if formed
         val grid = getLinkedGrid(item, level, player)
         grid?.let {
-            (machine.pattern as IBlockPattern).exAutoBuild(player, machine.multiblockState, it, item.getSetting("useHatches"))
+            (machine.pattern as IBlockPattern).exAutoBuild(
+                player,
+                machine.multiblockState,
+                it,
+                item.getSetting(LinkedTerminalMenu.USE_HATCHES_TAG)
+            )
             player.cooldowns.addCooldown(this, 20)
         }
         return InteractionResult.sidedSuccess(false)

@@ -1,16 +1,16 @@
 {
   "required": true,
   "minVersion": "0.8",
+  "priority": 2000,
   "package": "lu.kolja.expandedgt.mixins",
   "compatibilityLevel": "JAVA_17",
-  "refmap": "expandedgt.refmap.json",
+  "refmap": "mixins.expandedgt.refmap.json",
   "mixins": [
     "accessor.AccessorCustomFluidTank",
     "accessor.AccessorItemStackHandler",
     "gtceu.MixinBlockPattern"
   ],
-  "client": [
-  ],
+  "client": [],
   "injectors": {
     "defaultRequire": 1
   },
