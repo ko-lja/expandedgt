@@ -196,10 +196,9 @@ class RGBSprayBehavior(val paintItem: () -> ItemStack): IDurabilityBar, IInterac
 
         val hexField = TextFieldWidget(132, 88, 62, 16, null) { value ->
             val parsed = parseCompleteHex(value) ?: return@TextFieldWidget
-            selectedColor(held, parsed)
-            holder.markAsDirty()
             colorPicker.setColor(opaque(parsed))
         }
+        hexField.setClientSideWidget()
         hexField.setMaxStringLength(7)
         hexField.setValidator(::normalizeHex)
         hexField.setCurrentString(formatColor(selectedColor(held)))
