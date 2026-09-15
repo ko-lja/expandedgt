@@ -7,3 +7,4 @@ run
 extra-mods
 src/generated/resources/.cache
 sources
+server

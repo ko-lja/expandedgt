@@ -67,6 +67,7 @@ interface ITagFilterPartMachine: IDropSaveMachine {
         override fun getIcon(): IGuiTexture = GuiTextures.BUTTON_BLACKLIST.getSubTexture(0f, 0f, 1f, .5f)
 
         override fun createConfigurator(): Widget? {
+            //if (FMLEnvironment.dist != Dist.CLIENT) return null // check bc it fails to open ui on server
             val whitelistField = MlTextField(
                 9, 6, 114, 32,
                 machine::getTagWhiteList,
@@ -108,14 +109,29 @@ interface ITagFilterPartMachine: IDropSaveMachine {
 
             val callback: (StackHandlerWidget<*, *>, MlTextField) -> Runnable = { widget, field ->
                 Runnable {
-                    val tags = widget.getTags().map { it.location.toString() }.toList()
+                    val baseWidget = widget as Widget
+
+                    // Tag labels are purely client-side.
+                    if (!baseWidget.isRemote) {
+                        return@Runnable
+                    }
+
+                    val tags = widget.getTags()
+                        .map { it.location.toString() }
+                        .toList()
 
                     val newWidgets = TagLabelContainer.createTagLabelContainer(field, tags)
+
                     container.clearAllWidgets()
                     container.addWidgets(*newWidgets)
 
-                    if (!widget.isEmpty()) container.setVisible(true).isActive = true
-                    else container.setVisible(false).isActive = false
+                    if (!widget.isEmpty()) {
+                        container.setVisible(true)
+                            .isActive = true
+                    } else {
+                        container.setVisible(false)
+                            .isActive = false
+                    }
                 }
             }
 

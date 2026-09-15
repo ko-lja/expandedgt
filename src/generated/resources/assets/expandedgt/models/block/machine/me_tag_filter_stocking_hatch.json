@@ -12,10 +12,10 @@
       "model": {
         "parent": "gtceu:block/machine/template/part/hatch_machine",
         "textures": {
-          "bottom": "gtceu:block/casings/voltage/uv/bottom",
+          "bottom": "gtceu:block/casings/voltage/luv/bottom",
           "overlay": "expandedgt:block/overlay/ae2/me_tag_filter_stocking_hatch",
-          "side": "gtceu:block/casings/voltage/uv/side",
-          "top": "gtceu:block/casings/voltage/uv/top"
+          "side": "gtceu:block/casings/voltage/luv/side",
+          "top": "gtceu:block/casings/voltage/luv/top"
         }
       }
     },
@@ -23,10 +23,10 @@
       "model": {
         "parent": "gtceu:block/machine/template/part/hatch_machine_color_ring",
         "textures": {
-          "bottom": "gtceu:block/casings/voltage/uv/bottom",
+          "bottom": "gtceu:block/casings/voltage/luv/bottom",
           "overlay": "expandedgt:block/overlay/ae2/me_tag_filter_stocking_hatch",
-          "side": "gtceu:block/casings/voltage/uv/side",
-          "top": "gtceu:block/casings/voltage/uv/top"
+          "side": "gtceu:block/casings/voltage/luv/side",
+          "top": "gtceu:block/casings/voltage/luv/top"
         }
       }
     },
@@ -34,10 +34,10 @@
       "model": {
         "parent": "gtceu:block/machine/template/part/hatch_machine",
         "textures": {
-          "bottom": "gtceu:block/casings/voltage/uv/bottom",
+          "bottom": "gtceu:block/casings/voltage/luv/bottom",
           "overlay": "expandedgt:block/overlay/ae2/me_tag_filter_stocking_hatch",
-          "side": "gtceu:block/casings/voltage/uv/side",
-          "top": "gtceu:block/casings/voltage/uv/top"
+          "side": "gtceu:block/casings/voltage/luv/side",
+          "top": "gtceu:block/casings/voltage/luv/top"
         }
       }
     },
@@ -45,10 +45,10 @@
       "model": {
         "parent": "gtceu:block/machine/template/part/hatch_machine_color_ring",
         "textures": {
-          "bottom": "gtceu:block/casings/voltage/uv/bottom",
+          "bottom": "gtceu:block/casings/voltage/luv/bottom",
           "overlay": "expandedgt:block/overlay/ae2/me_tag_filter_stocking_hatch",
-          "side": "gtceu:block/casings/voltage/uv/side",
-          "top": "gtceu:block/casings/voltage/uv/top"
+          "side": "gtceu:block/casings/voltage/luv/side",
+          "top": "gtceu:block/casings/voltage/luv/top"
         }
       }
     }

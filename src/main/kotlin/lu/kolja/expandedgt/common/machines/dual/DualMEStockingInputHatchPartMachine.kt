@@ -19,12 +19,7 @@ import com.gregtechceu.gtceu.config.ConfigHolder
 import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEFluidConfigWidget
 import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEItemConfigWidget
 import com.gregtechceu.gtceu.integration.ae2.machine.feature.multiblock.IMEStockingPart
-import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList
-import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot
-import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemList
-import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot
-import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlot
-import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlotList
+import com.gregtechceu.gtceu.integration.ae2.slot.*
 import com.gregtechceu.gtceu.integration.ae2.utils.AEUtil
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget
 import com.lowdragmc.lowdraglib.gui.widget.Widget
@@ -44,7 +39,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.capability.IFluidHandler
-import java.util.PriorityQueue
+import java.util.*
 import java.util.function.Predicate
 
 class DualMEStockingInputHatchPartMachine(holder: IMachineBlockEntity, tier: Int) :

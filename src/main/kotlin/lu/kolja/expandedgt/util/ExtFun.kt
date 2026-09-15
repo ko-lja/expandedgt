@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack
  * Translates the given string to a component
  */
 fun String.translate(): MutableComponent = Component.translatable(this)
+fun String.translate(vararg args: Any): MutableComponent = Component.translatable(this, args)
 
 /**
  * Translates the given string to a component

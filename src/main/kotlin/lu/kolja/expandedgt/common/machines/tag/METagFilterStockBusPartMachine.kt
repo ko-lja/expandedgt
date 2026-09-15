@@ -29,6 +29,12 @@ open class METagFilterStockBusPartMachine(holder: IMachineBlockEntity): MEStocki
 
     var filter: IPartitionList? = null
 
+    init {
+        setAutoPullTest {
+            test(it.what)
+        }
+    }
+
     override fun refreshList() {
         val grid = this.mainNode.grid
         if (grid == null) {
@@ -100,10 +106,10 @@ open class METagFilterStockBusPartMachine(holder: IMachineBlockEntity): MEStocki
     override fun readConfigFromTag(tag: CompoundTag) {
         super.readConfigFromTag(tag)
         if (tag.contains(ITagFilterPartMachine.TAG_WHITELIST)) {
-            whitelist = tag.getString(ITagFilterPartMachine.TAG_WHITELIST)
+            setTagWhiteList(tag.getString(ITagFilterPartMachine.TAG_WHITELIST))
         }
         if (tag.contains(ITagFilterPartMachine.TAG_BLACKLIST)) {
-            blacklist = tag.getString(ITagFilterPartMachine.TAG_BLACKLIST)
+            setTagBlackList(tag.getString(ITagFilterPartMachine.TAG_BLACKLIST))
         }
     }
 

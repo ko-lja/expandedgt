@@ -2,7 +2,6 @@ package lu.kolja.expandedgt.items.linked
 
 import appeng.core.localization.GuiText
 import appeng.core.localization.Tooltips
-import com.gregtechceu.gtceu.api.item.component.IInteractionItem
 import com.gregtechceu.gtceu.api.machine.MetaMachine
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController
 import lu.kolja.expandedgt.interfaces.IBlockPattern

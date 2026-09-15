@@ -5,11 +5,13 @@ import com.gregtechceu.gtceu.api.item.component.IItemUIFactory
 import com.lowdragmc.lowdraglib.gui.editor.ColorPattern
 import com.lowdragmc.lowdraglib.gui.factory.HeldItemUIFactory
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI
-import com.lowdragmc.lowdraglib.gui.widget.*
+import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget
+import com.lowdragmc.lowdraglib.gui.widget.Widget
+import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup
 import com.lowdragmc.lowdraglib.gui.widget.layout.Align
 import com.lowdragmc.lowdraglib.utils.Size
 import lu.kolja.expandedgt.widgets.SimpleToggleButtonWidget
-import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import org.jetbrains.annotations.ApiStatus
@@ -29,7 +31,7 @@ class LinkedTerminalMenu: IItemUIFactory {
     }
 
     fun createWidget(held: ItemStack): Widget {
-        val useAe = Setting(USE_AE_TAG, false)
+        val useHatches = Setting(USE_HATCHES_TAG, false)
         val group = WidgetGroup(0, 0, 180, 180)
         group.addWidget(
             DraggableScrollableWidgetGroup(10, 10, 160, 160)
@@ -40,8 +42,8 @@ class LinkedTerminalMenu: IItemUIFactory {
                 .addWidget(
                     SimpleToggleButtonWidget(
                         142, 5, 10, 10,
-                        { useAe.getValue(held) },
-                        { useAe.setValue(held, it) })
+                        { useHatches.getValue(held) },
+                        { useHatches.setValue(held, it) })
                 )
                 .setAlign(Align.CENTER)
         )

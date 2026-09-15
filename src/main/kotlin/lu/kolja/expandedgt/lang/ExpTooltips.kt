@@ -9,7 +9,13 @@ enum class ExpTooltips(var text: String): LocalizationEnum {
     TagFilterInfo("Left-click to add tags to the filter, right-click to copy tags to the clipboard"),
     ShiftInfo("§7Press §o[SHIFT] §r§7for more info"),
     BoundTo("Bound to %s"),
-    LinkedTermHint("§c§oNote: This will only pull blocks from your ME network, not your inventory");
+    LinkedTermHint("§c§oNote: This will only pull blocks from your ME network, not your inventory"),
+    RgbSprayColor("§7Selected Color: §f%s"),
+    RgbSprayUses("§7Uses: §b%s§7/§b%s"),
+    RgbSprayFuel("§7Refuels with §dUniversal Dye"),
+    RgbSprayCopyColor("§7Middle-click a painted machine to copy its color"),
+    UniversalDyeConsumption("§7Consumed to refill the RGB Spray Can when needed"),
+    UniversalDyeUsage("§7Refills %s uses in the RGB Spray Can per dye");
 
     override fun getTranslationKey() = "gui.tooltips.expandedgt.$name"
 

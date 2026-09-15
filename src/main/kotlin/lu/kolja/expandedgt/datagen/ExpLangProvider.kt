@@ -3,6 +3,7 @@ package lu.kolja.expandedgt.datagen
 import appeng.core.localization.LocalizationEnum
 import com.tterrag.registrate.providers.RegistrateLangProvider
 import lu.kolja.expandedgt.lang.ExpGuiText
+import lu.kolja.expandedgt.lang.ExpPlayerMessages
 import lu.kolja.expandedgt.lang.ExpTooltips
 
 object ExpLangProvider {
@@ -15,5 +16,6 @@ object ExpLangProvider {
 
         addEnum(ExpTooltips::class.java)
         addEnum(ExpGuiText::class.java)
+        addEnum(ExpPlayerMessages::class.java)
     }
 }

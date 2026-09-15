@@ -12,4 +12,4 @@ Currently added by the mod:
 *   ME Tag Stocking Input Hatch | Tag Based Fluid filtering Input
 *   ME Dual Output Hatch | ME Output and Bus in one, also output buffer increased from the normal 2³¹ to 2⁶³
 
-_Note: There are currently no recipes included(will add some soon), it's up to you to add them._
+_Note: There are currently almost no recipes included(will add some soon), it's up to you to add them._

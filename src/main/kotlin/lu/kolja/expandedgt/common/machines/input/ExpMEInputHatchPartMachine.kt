@@ -6,7 +6,6 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour
 import com.gregtechceu.gtceu.integration.ae2.machine.MEInputHatchPartMachine
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList
-import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget
 import com.lowdragmc.lowdraglib.gui.widget.Widget
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup

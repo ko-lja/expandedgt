@@ -4,6 +4,9 @@ import appeng.core.localization.LocalizationEnum
 
 enum class ExpGuiText(val text: String) : LocalizationEnum {
     CreativeTab("Expanded GT"),
+    RgbSprayTitle("RGB Spray Can"),
+    RgbSprayPreview("Preview"),
+    RgbSprayHex("Hex"),
     TagFilterConfig("Tag Filter Config"),
     Whitelist("Whitelist"),
     Blacklist("Blacklist"),

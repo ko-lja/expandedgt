@@ -10,6 +10,10 @@ import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlot
 open class ExpAEItemConfigWidget(x: Int, y: Int, val list: ExportOnlyAEItemList, slots: Array<ExportOnlyAEItemSlot>): ConfigWidget(x, y, slots, list.isStocking) {
     lateinit var otherWidget: ExpAEItemConfigWidget
 
+    init {
+        this.amountSetWidget.selfPositionY = y - 38
+    }
+
     override fun init() {
         this.displayList = Array<IConfigurableSlot>(config.size) { ExportOnlyAEItemSlot() }
         this.cached = Array<IConfigurableSlot>(config.size) {

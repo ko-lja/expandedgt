@@ -30,9 +30,8 @@ class METagFilterStockHatchPartMachine(holder: IMachineBlockEntity): MEStockingH
     var filter: IPartitionList? = null
 
     init {
-        if (filter == null) filter = TagPriorityList(whitelist, blacklist)
         setAutoPullTest {
-            filter!!.isListed(it.what)
+            test(it.what)
         }
     }
 
@@ -107,10 +106,10 @@ class METagFilterStockHatchPartMachine(holder: IMachineBlockEntity): MEStockingH
     override fun readConfigFromTag(tag: CompoundTag) {
         super.readConfigFromTag(tag)
         if (tag.contains(ITagFilterPartMachine.TAG_WHITELIST)) {
-            whitelist = tag.getString(ITagFilterPartMachine.TAG_WHITELIST)
+            setTagWhiteList(tag.getString(ITagFilterPartMachine.TAG_WHITELIST))
         }
         if (tag.contains(ITagFilterPartMachine.TAG_BLACKLIST)) {
-            blacklist = tag.getString(ITagFilterPartMachine.TAG_BLACKLIST)
+            setTagBlackList(tag.getString(ITagFilterPartMachine.TAG_BLACKLIST))
         }
     }
 
