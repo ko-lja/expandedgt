@@ -82,6 +82,13 @@ legacyForge {
             sourceSet(sourceSets.main)
         }
     }
+
+    // NFRT recompiles Minecraft's own sources with javac, which fails on Forge's
+    // package-info.java that uses javax.annotation (JSR-250, removed from JDK 17
+    // bootclasspath). The Eclipse JDT compiler tolerates this gracefully.
+    tasks.named('createMinecraftArtifacts').configure {
+        useEclipseCompiler = true
+    }
 }
 
 sourceSets.main.resources {
@@ -113,6 +120,14 @@ repositories {
         url = uri("https://modmaven.dev/")
         content {
             includeGroup "appeng"
+        }
+    }
+    // 本地 flatDir 仓库：优先解析 GTCEU，跳过 maven.gtceu.com 网络请求
+    flatDir {
+        name = 'Local GTCEU'
+        dirs "libs"
+        content {
+            includeGroup 'com.gregtechceu.gtceu'
         }
     }
     maven {

@@ -11,6 +11,7 @@ import com.lowdragmc.lowdraglib.gui.widget.Widget
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup
 import com.lowdragmc.lowdraglib.gui.widget.layout.Align
 import com.lowdragmc.lowdraglib.utils.Size
+import lu.kolja.expandedgt.lang.ExpGuiText
 import lu.kolja.expandedgt.widgets.SimpleToggleButtonWidget
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -38,7 +39,7 @@ class LinkedTerminalMenu: IItemUIFactory {
                 .setBackground(GuiTextures.DISPLAY)
                 .setYScrollBarWidth(3)
                 .setYBarStyle(null, ColorPattern.BLACK.rectTexture().setRadius(1f))
-                .addWidget(LabelWidget(8, 5, "Use Hatches"))
+                .addWidget(LabelWidget(8, 5, ExpGuiText.UseHatches.translationKey))
                 .addWidget(
                     SimpleToggleButtonWidget(
                         142, 5, 10, 10,

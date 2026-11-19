@@ -8,6 +8,7 @@ enum class ExpGuiText(val text: String) : LocalizationEnum {
     RgbSprayPreview("Preview"),
     RgbSprayHex("Hex"),
     TagFilterConfig("Tag Filter Config"),
+    UseHatches("Use Hatches"),
     Whitelist("Whitelist"),
     Blacklist("Blacklist"),
     // Tag Filter Config Widget Operator descriptions

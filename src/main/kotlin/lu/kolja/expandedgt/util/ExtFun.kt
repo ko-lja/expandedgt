@@ -25,7 +25,7 @@ fun String.literal(): Component = Component.literal(this)
 /**
  * Adds a tooltip to the machine definition that indicates if it can be shared with other multiblocks
  */
-fun <T : MachineDefinition> MachineBuilder<T>.sharedPart(shared: Boolean = true): MachineBuilder<T> = this.tooltips(
+fun <D : MachineDefinition, B : MachineBuilder<D, B>> MachineBuilder<D, B>.sharedPart(shared: Boolean = true): B = this.tooltips(
     "gtceu.part_sharing.${if (shared) "enabled" else "disabled"}".translate()
 )
 
