@@ -16,6 +16,7 @@
   "gui.expandedgt.RgbSprayPreview": "Preview",
   "gui.expandedgt.RgbSprayTitle": "RGB Spray Can",
   "gui.expandedgt.TagFilterConfig": "Tag Filter Config",
+  "gui.expandedgt.UseHatches": "Use Hatches",
   "gui.expandedgt.Whitelist": "Whitelist",
   "gui.expandedgt.Wildcard": "§b* §rIndicates a Wildcard",
   "gui.expandedgt.XorNot": "§b^ §r= §aXOR    §b! §r= §aNOT",

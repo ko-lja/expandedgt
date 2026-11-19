@@ -1,4 +1,6 @@
 .gradle
+gradle/
+lib/
 .idea
 .kotlin
 build
@@ -8,3 +10,6 @@ extra-mods
 src/generated/resources/.cache
 sources
 server
+.gradle-home/
+*.gfi
+PR.md
